@@ -1,8 +1,9 @@
+import 'package:basic_calculator/calculator_logic.dart';
 import 'package:basic_calculator/my_buttons.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -10,13 +11,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String question = '';
+  String result = '';
+  final CalculatorLogic calculationLogic = CalculatorLogic();
   String buttonTap(String buttonValue) {
     setState(() {
-      question = buttonValue;
+      if (buttonValue == 'AC') {
+        question = '';
+        result = '';
+      } else if (buttonValue == 'DEL') {
+        question = question.isNotEmpty
+            ? question.substring(0, question.length - 1)
+            : '';
+      } else if (buttonValue == '=') {
+        print('Evaluating: $question');
+        double evaluation = calculationLogic.evaluateExpression(question);
+        print('Result: $evaluation'); // Debug log
+        result = evaluation.toString();
+        question = result;
+      } else if (buttonValue == 'ANS') {
+        if (result.isNotEmpty) {
+          // If there's a result, append it to the question.
+          // Only append if there is an operator before (to continue the operation)
+          if (question.isNotEmpty && question.contains(RegExp(r'[\+\-\×\÷]'))) {
+            question += result; // Reuse result in the new expression
+          }
+        }
+      } else {
+        question += buttonValue;
+      }
     });
     return '';
-
-    // print('clicked');
   }
 
   @override
@@ -25,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'AC',
       'DEL',
       '%',
-      '/',
+      '÷',
       '7',
       '8',
       '9',
@@ -76,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             buttontext[index] == 'DEL' ||
                             buttontext[index] == '%')
                         ? Colors.grey
-                        : (buttontext[index] == '/' ||
+                        : (buttontext[index] == '÷' ||
                                 buttontext[index] == '×' ||
                                 buttontext[index] == '-' ||
                                 buttontext[index] == '+' ||
@@ -88,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   buttontext[index],
                   textColor,
                   buttonBackground,
-                  buttonTap(
+                  () => buttonTap(
                     buttontext[index],
                   ),
                 );
