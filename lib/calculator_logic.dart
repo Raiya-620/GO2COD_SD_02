@@ -1,30 +1,30 @@
 class CalculatorLogic {
   double evaluateExpression(String expression) {
     try {
-      // Normalize the input: Replace '×' with '*' and '÷' with '/'
+      
       expression = expression.replaceAll('×', '*').replaceAll('÷', '/');
 
-      // Step 1: Tokenize the input expression
+    
       List<String> tokens = _tokenize(expression);
 
-      // Step 2: Handle '*' and '/' first
+    
       tokens = _processHighPrecedence(tokens);
 
-      // Step 3: Handle '+' and '-' next
+      
       return _processLowPrecedence(tokens);
     } catch (e) {
       print("Error: $e");
-      return 0.0; // Return 0.0 if there is an error
+      return 0.0; 
     }
   }
 
-  // Tokenize the input expression into numbers and operators
+
   List<String> _tokenize(String expression) {
     RegExp regex = RegExp(r'(\d+\.?\d*|\+|\-|\*|\/)');
     return regex.allMatches(expression).map((e) => e.group(0)!).toList();
   }
 
-  // Process * and / operators
+ 
   List<String> _processHighPrecedence(List<String> tokens) {
     List<String> result = [];
     double tempResult;
@@ -46,7 +46,6 @@ class CalculatorLogic {
     return result;
   }
 
-  // Process + and - operators
   double _processLowPrecedence(List<String> tokens) {
     double result = double.parse(tokens[0]);
 

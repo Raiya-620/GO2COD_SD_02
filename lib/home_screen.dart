@@ -25,15 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
       } else if (buttonValue == '=') {
         print('Evaluating: $question');
         double evaluation = calculationLogic.evaluateExpression(question);
-        print('Result: $evaluation'); // Debug log
+        print('Result: $evaluation');
         result = evaluation.toString();
         question = result;
       } else if (buttonValue == 'ANS') {
         if (result.isNotEmpty) {
-          // If there's a result, append it to the question.
-          // Only append if there is an operator before (to continue the operation)
+         
           if (question.isNotEmpty && question.contains(RegExp(r'[\+\-\×\÷]'))) {
-            question += result; // Reuse result in the new expression
+            question += result; 
           }
         }
       } else {
